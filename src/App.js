@@ -1,24 +1,32 @@
-import logo from './logo.svg';
+import { Navbar, Container, Row, Col } from 'react-bootstrap';
+import AddBook from './components/AddBook';
+import BooksList from './components/BooksList.js';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar bg="dark" variant="dark" className="header">
+        <Container>
+          <Navbar.Brand href="#home">Library - Firebase CRUD</Navbar.Brand>
+        </Container>
+
+      </Navbar>
+      <Container style={{width: "400px"}}>
+        <Row>
+          <Col>
+            <AddBook/>
+          </Col>
+        </Row>
+      </Container>
+      <Container>
+        <Row>
+          <Col>
+            <BooksList/>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 
