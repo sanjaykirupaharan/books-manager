@@ -1,12 +1,12 @@
 
 // request.time > timestamp.date(2020, 9, 10); --> error solution for missing or insufficient data
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Alert, InputGroup, Button, ButtonGroup } from "react-bootstrap";
 import BookDataService from "../services/book.services";
 
 
-const AddBook = () => {
+const AddBook = ({ id, setBookId }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [status, setStatus] = useState("Available");
@@ -28,8 +28,15 @@ const AddBook = () => {
     console.log(newBook);
 
     try {
-      await BookDataService.addBooks(newBook);
-      setMessage({ error: false, msg: "New Book added successfully!" });
+      if (id !== undefined && id !== "") {
+        await BookDataService.updateBook(id, newBook);
+        setBookId("");
+        setMessage({ error: false, msg: "Updated successfully!" });
+      } else {
+        await BookDataService.addBooks(newBook);
+        setMessage({ error: false, msg: "New Book added successfully!" });
+      }
+
     } catch (err) {
       setMessage({ error: true, msg: err.message })
     }
@@ -39,20 +46,40 @@ const AddBook = () => {
 
   };
 
+  const editHandler = async () => {
+    setMessage("");
+    try {
+      const docSnap = await BookDataService.getBook(id);
+      console.log("The record is : ", docSnap.data())
+      setTitle(docSnap.data().title);
+      setAuthor(docSnap.data().author);
+      setStatus(docSnap.data().status);
+    } catch (err) {
+      setMessage({ error: true, msg: err.message });
+    }
+  }
+
+  useEffect(() => {
+    console.log("The id here is:", id);
+    if (id !== undefined && id !== "") {
+      editHandler();
+    }
+  }, [id])
+
   return (
     <>
-    <div className="p-4 box">
-      {message?.msg && (
-        <Alert
-          variant={message?.error ? "danger" : "success"}
-          dismissible
-          onClose={() => setMessage("")}
-        >
-          {""}
-          {message?.msg}
-        </Alert>
-      )}
-      
+      <div className="p-4 box">
+        {message?.msg && (
+          <Alert
+            variant={message?.error ? "danger" : "success"}
+            dismissible
+            onClose={() => setMessage("")}
+          >
+            {""}
+            {message?.msg}
+          </Alert>
+        )}
+
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBookTitle">
             <InputGroup>

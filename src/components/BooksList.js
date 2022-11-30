@@ -3,7 +3,7 @@ import { Table, Button } from "react-bootstrap";
 import BookDataService from "../services/book.services";
 
 
-const BooksList = () => {
+const BooksList = ({ getBookId }) => {
   const [books, setBooks] = useState([]);
   useEffect(() => {
     getBooks();
@@ -23,11 +23,11 @@ const BooksList = () => {
   return (
     <>
       {/* <pre> {JSON.stringify(books, undefined, 2)} </pre> */}
-      {/* <div className="mb-2">
-        <Button variant="dark edit">
-          Refresh List
+      <div className="mb-2">
+        <Button variant="outline-dark edit" onClick={getBooks}>
+          Refresh 
         </Button>
-      </div> */}
+      </div>
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -50,7 +50,7 @@ const BooksList = () => {
                   <Button
                     variant="secondary"
                     className="edit"
-                    // onClick={(e) => getBookId(doc.id)}
+                    onClick={(e) => getBookId(doc.id)}
                   >
                     Edit
                   </Button>

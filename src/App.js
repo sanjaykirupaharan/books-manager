@@ -1,9 +1,19 @@
+// 37.10 watch
 import { Navbar, Container, Row, Col } from 'react-bootstrap';
 import AddBook from './components/AddBook';
 import BooksList from './components/BooksList.js';
 import './App.css';
+import {useState} from "react";
 
 function App() {
+  const [bookId, setBookId] = useState("");
+
+  const getBookIdHandler = (id) => {
+    console.log("The ID of the document to be edited: ", id)
+    setBookId(id);
+  }
+
+
   return (
     <>
       <Navbar bg="dark" variant="dark" className="header">
@@ -15,14 +25,14 @@ function App() {
       <Container style={{width: "400px"}}>
         <Row>
           <Col>
-            <AddBook/>
+            <AddBook id={bookId} setBookId={setBookId}/>
           </Col>
         </Row>
       </Container>
       <Container>
         <Row>
           <Col>
-            <BooksList/>
+            <BooksList getBookId= {getBookIdHandler} />
           </Col>
         </Row>
       </Container>
